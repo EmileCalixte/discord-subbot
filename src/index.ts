@@ -1,8 +1,12 @@
-import {say} from "./SomeModule";
-import * as path from "path";
+import * as dotenv from "dotenv";
+import Bot from "./bot/Bot";
 
-const message: string = "Hello world";
+dotenv.config();
 
-console.log(path.resolve("."));
+const bot = new Bot(process.env.BOT_TOKEN);
 
-say(message);
+bot.run()
+    .catch(e => {
+        console.error(e);
+        process.exit(1);
+    });
