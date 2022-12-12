@@ -1,11 +1,13 @@
 import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
 import Ping from "./commands/Ping";
-import CommandInterface from "./commands/CommandInterface";
+import {CommandInterface} from "../types/Commands";
+import SetChannel from "./commands/SetChannel";
 
 type CommandCollection = Collection<string, CommandInterface>;
 
 const commands: CommandInterface[] = [
     Ping,
+    SetChannel,
 ];
 
 class Bot {
@@ -64,11 +66,16 @@ class Bot {
             try {
                 await command.execute(interaction);
             } catch (error) {
-                console.error(error);
-                await interaction.reply({
-                    content: "An internal error occurred while executing command. Please try again later.",
-                    ephemeral: true
-                });
+                console.error("Error catched in slash command event handler", error);
+
+                try {
+                    await interaction.reply({
+                        content: "An internal error occurred while executing command. Please try again later.",
+                        ephemeral: true
+                    });
+                } catch(error) {
+                    console.error("Could not reply to interaction after catching error in slash command event handler", error);
+                }
             }
         });
     }

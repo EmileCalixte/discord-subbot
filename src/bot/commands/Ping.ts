@@ -1,4 +1,4 @@
-import CommandInterface from "./CommandInterface";
+import {CommandInterface} from "../../types/Commands";
 import {SlashCommandBuilder} from "discord.js";
 
 const Ping: CommandInterface = {
