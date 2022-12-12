@@ -1,4 +1,4 @@
-.PHONY: init build run
+.PHONY: init build run regcmds
 
 init:
 	docker compose run --rm node npm install --verbose --save-dev \
@@ -9,3 +9,6 @@ build:
 
 run:
 	docker compose exec node node ./dist/main.cjs
+
+regcmds:
+	docker compose exec node node dist/register-commands.cjs

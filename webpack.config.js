@@ -2,10 +2,13 @@ import * as path from "path";
 import NodemonPlugin from "nodemon-webpack-plugin";
 
 const config = {
-    entry: "./src/index.ts",
+    entry: {
+        main: "./src/index.ts",
+        "register-commands": "./src/register-commands.ts",
+    },
     target: "node",
     output: {
-        filename: "main.cjs",
+        filename: "[name].cjs",
         path: path.resolve(path.dirname("."), "dist"),
         clean: true, // Delete old files before creating new ones
     },
@@ -22,7 +25,9 @@ const config = {
         ],
     },
     plugins: [
-        new NodemonPlugin(),
+        new NodemonPlugin({
+            script: "dist/main.cjs",
+        }),
     ],
 };
 
