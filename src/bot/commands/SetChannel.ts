@@ -1,11 +1,23 @@
 import {CommandInterface} from "../../types/Commands";
-import {ChannelType, SlashCommandBuilder, TextChannel} from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, SlashCommandBuilder, TextChannel} from "discord.js";
 import {getLocaleString} from "../../utils/LocaleUtil";
 import CannotSendMessageInChannelError from "../../errors/CannotSendMessageInChannelError";
+import ButtonId from "../../types/ButtonId";
 
 async function handle(channel: TextChannel) {
+    const row = new ActionRowBuilder<ButtonBuilder>()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId(ButtonId.RegisterSubscriber)
+                .setLabel("M'enregistrer")
+                .setStyle(ButtonStyle.Primary),
+        );
+
     try {
-        await (channel as TextChannel).send("Here");
+        await (channel as TextChannel).send({
+            content: "Cliquez sur le bouton ci-dessous pour enregistrer votre adresse e-mail",
+            components: [row],
+        });
     } catch (error) {
         throw new CannotSendMessageInChannelError(`Cannot send message in channel <#${channel.id}>`);
     }
