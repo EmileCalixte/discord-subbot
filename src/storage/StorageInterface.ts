@@ -8,6 +8,12 @@ interface StorageInterface {
     getRegisterMessageId: () => Promise<Snowflake | null>
 
     getRegisterMessageChannelId: () => Promise<Snowflake | null>
+
+    addAllowedRoleId: (roleId: Snowflake) => Promise<any>
+
+    removeAllowedRoleId: (roleId: Snowflake) => Promise<any>
+
+    getAllowedRoleIds: () => Promise<Snowflake[]>
 }
 
 export default StorageInterface;

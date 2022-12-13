@@ -6,9 +6,10 @@ import * as path from "path";
 enum Key {
     RegisterMessageId = "registerMessage.messageId",
     RegisterMessageChannelId = "registerMessage.channelId",
+    AllowedRoleIds = "allowedRoleIds",
 }
 
-type StorageObjectValue = StorageObject | string | number;
+type StorageObjectValue = StorageObject | string | number | Array<StorageObjectValue>;
 
 type StorageObject = {
     [key: string]: StorageObjectValue;
@@ -39,6 +40,40 @@ class StorageJSON implements StorageInterface {
         return this.getSnowflakeKeyValue(Key.RegisterMessageChannelId);
     }
 
+    public async addAllowedRoleId(roleId: Snowflake) {
+        const allowedRoleIds = await this.getAllowedRoleIds();
+
+        allowedRoleIds.push(roleId);
+
+        await this.saveKeyValue(Key.AllowedRoleIds, allowedRoleIds);
+    }
+
+    public async removeAllowedRoleId(roleId: Snowflake) {
+        const allowedRoleIds = await this.getAllowedRoleIds();
+
+        const roleIdIndex = allowedRoleIds.indexOf(roleId);
+
+        if (roleIdIndex < 0) {
+            return;
+        }
+
+        allowedRoleIds.splice(roleIdIndex, 1);
+
+        await this.saveKeyValue(Key.AllowedRoleIds, allowedRoleIds);
+    }
+
+    public async getAllowedRoleIds(): Promise<Snowflake[]> {
+        const value = await this.getArrayKeyValue(Key.AllowedRoleIds);
+
+        for (const [i, roleId] of value.entries()) {
+            if (typeof roleId !== "string") {
+                throw new Error(`Expected StorageObject ${Key.AllowedRoleIds}[${i}] to be a string, got ${typeof roleId}`);
+            }
+        }
+
+        return value as string[];
+    }
+
     private async getSnowflakeKeyValue(key: Key): Promise<Snowflake | null> {
         const value = await this.getKeyValue(key);
 
@@ -47,7 +82,21 @@ class StorageJSON implements StorageInterface {
         }
 
         if (typeof value !== "string") {
-            throw new Error(`Expected StorageObject ${Key.RegisterMessageId} to be a string, got ${typeof value}`);
+            throw new Error(`Expected StorageObject ${key} to be a string, got ${typeof value}`);
+        }
+
+        return value;
+    }
+
+    private async getArrayKeyValue(key: Key): Promise<StorageObjectValue[]> {
+        const value = await this.getKeyValue(key);
+
+        if (value === undefined) {
+            return [];
+        }
+
+        if (!(value instanceof Array)) {
+            throw new Error(`Expected StorageObject ${key} to be an array, got ${typeof value}`);
         }
 
         return value;
