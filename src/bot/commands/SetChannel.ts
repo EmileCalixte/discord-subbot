@@ -1,10 +1,25 @@
 import {CommandInterface} from "../../types/Commands";
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, SlashCommandBuilder, TextChannel} from "discord.js";
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ChannelType, DiscordAPIError, RESTJSONErrorCodes,
+    SlashCommandBuilder,
+    Snowflake,
+    TextChannel
+} from "discord.js";
 import {getLocaleString} from "../../utils/LocaleUtil";
 import CannotSendMessageInChannelError from "../../errors/CannotSendMessageInChannelError";
 import ButtonId from "../../types/ButtonId";
+import Bot from "../Bot";
+import {getMessage} from "../../utils/DiscordJsManagerUtil";
 
-async function handle(channel: TextChannel) {
+type HandleReturnData = {
+    failedToDeleteExistingMessage: boolean;
+    deletedMessageUrl: string | null;
+}
+
+async function handle(channel: TextChannel): Promise<HandleReturnData> {
     const row = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(
             new ButtonBuilder()
@@ -13,14 +28,57 @@ async function handle(channel: TextChannel) {
                 .setStyle(ButtonStyle.Primary),
         );
 
+    const {
+        failed: failedToDeleteExistingMessage,
+        messageUrl: deletedMessageUrl,
+    } = await deleteExistingMessageIfExists(channel.guildId);
+
+    let newMessage;
+
     try {
-        await (channel as TextChannel).send({
+        newMessage = await (channel as TextChannel).send({
             content: "Cliquez sur le bouton ci-dessous pour enregistrer votre adresse e-mail",
             components: [row],
         });
     } catch (error) {
         throw new CannotSendMessageInChannelError(`Cannot send message in channel <#${channel.id}>`);
     }
+
+    await Bot.getInstance().getStorage().saveRegisterMessageId(newMessage.id);
+    await Bot.getInstance().getStorage().saveRegisterMessageChannelId(newMessage.channel.id);
+
+    return {failedToDeleteExistingMessage, deletedMessageUrl};
+}
+
+async function deleteExistingMessageIfExists(guildId: Snowflake): Promise<{failed: boolean, messageUrl: string | null}> {
+    const existingMessageChannelId = await Bot.getInstance().getStorage().getRegisterMessageChannelId();
+    const existingMessageId = await Bot.getInstance().getStorage().getRegisterMessageId();
+
+    let messageUrl = null;
+
+    if (existingMessageId && existingMessageChannelId) {
+        const existingMessage = await getMessage(guildId, existingMessageChannelId, existingMessageId)
+
+        if (existingMessage) {
+            messageUrl = existingMessage.url;
+
+            try {
+                await existingMessage.delete();
+            } catch (error) {
+                if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMessage) {
+                    return {
+                        failed: true,
+                        messageUrl,
+                    };
+                }
+            }
+        }
+    }
+
+    return {
+        failed: false,
+        messageUrl,
+    };
 }
 
 const SetChannel: CommandInterface = {
@@ -56,7 +114,26 @@ const SetChannel: CommandInterface = {
         }
 
         try {
-            await handle(channel);
+            const {
+                failedToDeleteExistingMessage,
+                deletedMessageUrl,
+            } = await handle(channel);
+
+            if (failedToDeleteExistingMessage) {
+                if (deletedMessageUrl) {
+                    interaction.editReply(":warning: " + getLocaleString(interaction.locale, {
+                        "en-US": `I could not delete my existing message: ${deletedMessageUrl} It may have already been deleted, or I can no longer access it. My new message should work anyway.`,
+                        fr: `Je n'ai pas pu supprimer mon message existant : ${deletedMessageUrl} Peut-être qu'il a déjà été supprimé, ou je n'y ai plus accès. Mon nouveau message dans ce salon doit quand même fonctionner.`,
+                    }));
+                } else {
+                    interaction.editReply(":warning: " + getLocaleString(interaction.locale, {
+                        "en-US": `I could not delete my existing message. It may have already been deleted, or I can no longer access it. My new message should work anyway.`,
+                        fr: `Je n'ai pas pu supprimer mon message existant. Peut-être qu'il a déjà été supprimé, ou je n'y ai plus accès. Mon nouveau message dans ce salon doit quand même fonctionner.`,
+                    }));
+                }
+
+                return;
+            }
         } catch (error) {
             if (error instanceof CannotSendMessageInChannelError) {
                 interaction.editReply(getLocaleString(interaction.locale, {
