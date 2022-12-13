@@ -1,6 +1,15 @@
 import {CommandInterface} from "../../types/Commands";
 import {ChannelType, SlashCommandBuilder, TextChannel} from "discord.js";
 import {getLocaleString} from "../../utils/LocaleUtil";
+import CannotSendMessageInChannelError from "../../errors/CannotSendMessageInChannelError";
+
+async function handle(channel: TextChannel) {
+    try {
+        await (channel as TextChannel).send("Here");
+    } catch (error) {
+        throw new CannotSendMessageInChannelError(`Cannot send message in channel <#${channel.id}>`);
+    }
+}
 
 const SetChannel: CommandInterface = {
     commandBuilder: new SlashCommandBuilder()
@@ -35,22 +44,21 @@ const SetChannel: CommandInterface = {
         }
 
         try {
-            await (channel as TextChannel).send("Here");
+            await handle(channel);
         } catch (error) {
-            interaction.editReply(getLocaleString(interaction.locale, {
-                "en-US": `I don't have access to the <#${channel.id}> channel. Please check that I have the permission to write there before trying again.`,
-                fr: `Je n'ai pas accès au salon <#${channel.id}>. Merci de vérifier que j'ai la permission d'y écrire avant de réessayer.`,
-            }));
+            if (error instanceof CannotSendMessageInChannelError) {
+                interaction.editReply(getLocaleString(interaction.locale, {
+                    "en-US": `I don't have access to the <#${channel.id}> channel. Please check that I have the permission to write there before trying again.`,
+                    fr: `Je n'ai pas accès au salon <#${channel.id}>. Merci de vérifier que j'ai la permission d'y écrire avant de réessayer.`,
+                }));
 
-            return;
+                return;
+            } else {
+                throw error;
+            }
         }
 
-        // TODO handle
-
-        interaction.editReply(getLocaleString(interaction.locale, {
-            "en-US": `The <#${channel.id}> channel has been successfully saved as registering channel.`,
-            fr: `Le salon <#${channel.id}> a bien été enregistré en tant que salon d'enregistrement.`,
-        }));
+        interaction.deleteReply();
     }
 }
 
