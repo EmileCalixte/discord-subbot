@@ -5,12 +5,14 @@ import SetChannel from "./commands/SetChannel";
 import StorageInterface from "../storage/StorageInterface";
 import StorageJSON from "../storage/StorageJSON";
 import * as path from "path";
+import SubRoles from "./commands/SubRoles";
 
 type CommandCollection = Collection<string, CommandInterface>;
 
 const commands: CommandInterface[] = [
     Ping,
     SetChannel,
+    SubRoles,
 ];
 
 class Bot {
@@ -104,7 +106,7 @@ class Bot {
                         content: "An internal error occurred while executing command. Please try again later.",
                         ephemeral: true
                     });
-                } catch(error) {
+                } catch (error) {
                     console.error("Could not reply to interaction after catching error in slash command event handler", error);
                 }
             }
