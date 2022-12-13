@@ -5,28 +5,16 @@ import {getLocaleString} from "../../utils/LocaleUtil";
 const SetChannel: CommandInterface = {
     commandBuilder: new SlashCommandBuilder()
         .setName("setchannel")
-        .setDescription("Sets the channel in which subscribers will be able to register")
+        .setDescription("Allows subscribers to register in the channel where the command is executed")
         .setDescriptionLocalizations({
-            fr: "Définit le salon dans lequel les abonnés vont pouvoir s'enregistrer",
+            fr: "Permet aux abonnés de s'enregistrer dans le salon où la commande est exécutée",
         })
-        .addChannelOption(option =>
-            option
-                .setName("channel")
-                .setNameLocalizations({
-                    fr: "salon",
-                })
-                .setDescription("The channel")
-                .setDescriptionLocalizations({
-                    fr: "Le salon",
-                })
-                .setRequired(true)
-        )
         .setDefaultMemberPermissions(0),
 
     execute: async (interaction) => {
         await interaction.deferReply({ephemeral: true});
 
-        const channel = interaction.options.getChannel("channel");
+        const channel = interaction.channel;
 
         if (channel === null) {
             interaction.editReply(getLocaleString(interaction.locale, {
