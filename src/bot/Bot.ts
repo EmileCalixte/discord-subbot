@@ -2,6 +2,9 @@ import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
 import Ping from "./commands/Ping";
 import {CommandInterface} from "../types/Commands";
 import SetChannel from "./commands/SetChannel";
+import StorageInterface from "../storage/StorageInterface";
+import StorageJSON from "../storage/StorageJSON";
+import * as path from "path";
 
 type CommandCollection = Collection<string, CommandInterface>;
 
@@ -11,13 +14,23 @@ const commands: CommandInterface[] = [
 ];
 
 class Bot {
+    private static instance: Bot | null = null;
+
     private client: Client;
 
     private token: string;
 
     private commands: CommandCollection;
 
+    private storage: StorageInterface;
+
     constructor(token: string) {
+        if (Bot.instance !== null) {
+            throw new Error("Bot has already been initialized");
+        }
+
+        Bot.instance = this;
+
         this.client = new Client({
             intents: [GatewayIntentBits.Guilds]
         });
@@ -26,17 +39,35 @@ class Bot {
 
         this.commands = new Collection();
 
+        this.storage = new StorageJSON(path.resolve(__dirname, process.env.JSON_STORAGE_PATH));
+
         for (const command of commands) {
             this.commands.set(command.commandBuilder.name, command);
         }
+    }
+
+    public static getInstance(): Bot {
+        if (this.instance === null) {
+            throw new Error("Bot has not been initialized yet");
+        }
+
+        return this.instance;
     }
 
     public async run() {
         await this.init();
     }
 
+    public getClient(): Client {
+        return this.client;
+    }
+
     public getCommands(): CommandCollection {
         return this.commands;
+    }
+
+    public getStorage(): StorageInterface {
+        return this.storage;
     }
 
     private async init() {
