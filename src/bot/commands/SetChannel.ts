@@ -25,7 +25,17 @@ async function handle(channel: TextChannel): Promise<HandleReturnData> {
             new ButtonBuilder()
                 .setCustomId(ButtonId.RegisterSubscriber)
                 .setLabel("M'enregistrer")
+                .setStyle(ButtonStyle.Success),
+
+            new ButtonBuilder()
+                .setCustomId(ButtonId.CheckRegistration)
+                .setLabel("Vérifier mon enregistrement")
                 .setStyle(ButtonStyle.Primary),
+
+            new ButtonBuilder()
+                .setCustomId(ButtonId.DeleteRegistration)
+                .setLabel("Supprimer mon enregistrement")
+                .setStyle(ButtonStyle.Secondary),
         );
 
     const {
