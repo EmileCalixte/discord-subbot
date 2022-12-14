@@ -75,6 +75,28 @@ async function handleCheckRegistrationButtonClick(interaction: ButtonInteraction
     }));
 }
 
+async function handleDeleteRegistrationButtonClick(interaction: ButtonInteraction) {
+    await interaction.deferReply({ephemeral: true});
+
+    const registeredEmailAddress = await Bot.getInstance().getStorage().getRegisteredUserEmailAddress(interaction.user.id);
+
+    if (!registeredEmailAddress) {
+        await interaction.editReply(getLocaleString(interaction.locale, {
+            "en-US": "You did not provide your email address.",
+            fr: "Vous n'avez pas fourni votre adresse e-mail.",
+        }));
+
+        return;
+    }
+
+    await Bot.getInstance().getStorage().deleteRegisteredUserEmailAddress(interaction.user.id);
+
+    await interaction.editReply(getLocaleString(interaction.locale, {
+        "en-US": "Your registration has successfully been deleted, your email address is no longer registered.",
+        fr: "Votre enregistrement a bien été supprimé, votre adresse e-mail n'est plus enregistrée.",
+    }));
+}
+
 export async function onButtonClick(interaction: ButtonInteraction) {
     switch (interaction.customId) {
         case ButtonId.RegisterSubscriber:
@@ -83,5 +105,7 @@ export async function onButtonClick(interaction: ButtonInteraction) {
         case ButtonId.CheckRegistration:
             await handleCheckRegistrationButtonClick(interaction);
             break;
+        case ButtonId.DeleteRegistration:
+            await handleDeleteRegistrationButtonClick(interaction);
     }
 }

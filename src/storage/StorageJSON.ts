@@ -88,7 +88,9 @@ class StorageJSON implements StorageInterface {
     }
 
     public async deleteRegisteredUserEmailAddress(userId: Snowflake): Promise<any> {
-        // TODO
+        const key = `${Key.RegisteredUsers}.${userId}`;
+
+        return await this.deleteKeyValue(key as Key);
     }
 
     private async getStringKeyValue(key: Key): Promise<string | null> {
@@ -190,6 +192,35 @@ class StorageJSON implements StorageInterface {
         }
 
         return value;
+    }
+
+    private async deleteKeyValue(key: Key) {
+        this.ensureStorageFileExists();
+
+        const storageObject = await this.getStorageObject();
+
+        const keyNames = key.split(".");
+
+        let object = storageObject;
+
+        for (const [i, keyName] of keyNames.entries()) {
+            if (!(keyName in object)) {
+                break;
+            }
+
+            if (i === keyNames.length - 1) {
+                delete object[keyName];
+                break;
+            }
+
+            if (!(object[keyName] instanceof Object)) {
+                throw new Error(`Expected StorageObject ${keyNames.splice(0, i+1).join(".")} to be an object, got ${typeof object[keyName]}`);
+            }
+
+            object = object[keyName] as StorageObject;
+        }
+
+        this.writeStorageObject(storageObject);
     }
 
     private async getStorageObject(): Promise<StorageObject> {
