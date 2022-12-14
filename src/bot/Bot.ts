@@ -1,6 +1,7 @@
 import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
 import {onButtonClick} from "../components/ButtonClickHandler";
 import {onModalSubmit} from "../components/ModalSubmitHandler";
+import GetAddresses from "./commands/GetAddresses";
 import Ping from "./commands/Ping";
 import {CommandInterface} from "../types/Commands";
 import SetChannel from "./commands/SetChannel";
@@ -15,6 +16,7 @@ const commands: CommandInterface[] = [
     Ping,
     SetChannel,
     SubRoles,
+    GetAddresses,
 ];
 
 class Bot {

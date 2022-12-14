@@ -20,6 +20,8 @@ interface StorageInterface {
     getRegisteredUserEmailAddress: (userId: Snowflake) => Promise<string | null>
 
     deleteRegisteredUserEmailAddress: (userId: Snowflake) => Promise<any>
+
+    getAllRegisteredUserEmailAddresses: () => Promise<{[key: Snowflake]: string}>
 }
 
 export default StorageInterface;

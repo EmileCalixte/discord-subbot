@@ -93,6 +93,22 @@ class StorageJSON implements StorageInterface {
         return await this.deleteKeyValue(key as Key);
     }
 
+    public async getAllRegisteredUserEmailAddresses(): Promise<{[key: Snowflake]: string}> {
+        const value = await this.getKeyValue(Key.RegisteredUsers);
+
+        if (value === null) {
+            return {};
+        }
+
+        for (const [userId, email] of Object.entries(value)) {
+            if (typeof email !== "string") {
+                throw new Error(`Expected Storage Object ${Key.RegisteredUsers}.${userId} to be a string, got ${typeof email}`);
+            }
+        }
+
+        return value as {[key: Snowflake]: string};
+    }
+
     private async getStringKeyValue(key: Key): Promise<string | null> {
         const value = await this.getKeyValue(key);
 
