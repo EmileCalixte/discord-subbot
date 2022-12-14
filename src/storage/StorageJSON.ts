@@ -7,6 +7,7 @@ enum Key {
     RegisterMessageId = "registerMessage.messageId",
     RegisterMessageChannelId = "registerMessage.channelId",
     AllowedRoleIds = "allowedRoleIds",
+    RegisteredUsers = "registeredUsers",
 }
 
 type StorageObjectValue = StorageObject | string | number | Array<StorageObjectValue>;
@@ -72,6 +73,36 @@ class StorageJSON implements StorageInterface {
         }
 
         return value as string[];
+    }
+
+    public async saveRegisteredUserEmailAddress(userId: Snowflake, emailAddress: string): Promise<any> {
+        const key = `${Key.RegisteredUsers}.${userId}`;
+
+        await this.saveKeyValue(key as Key, emailAddress);
+    }
+
+    public async getRegisteredUserEmailAddress(userId: Snowflake): Promise<string | null> {
+        const key = `${Key.RegisteredUsers}.${userId}`;
+
+        return await this.getStringKeyValue(key as Key);
+    }
+
+    public async deleteRegisteredUserEmailAddress(userId: Snowflake): Promise<any> {
+        // TODO
+    }
+
+    private async getStringKeyValue(key: Key): Promise<string | null> {
+        const value = await this.getKeyValue(key);
+
+        if (value === undefined) {
+            return null;
+        }
+
+        if (typeof value !== "string") {
+            throw new Error(`Expected StorageObject ${key} to be a string, got ${typeof value}`);
+        }
+
+        return value;
     }
 
     private async getSnowflakeKeyValue(key: Key): Promise<Snowflake | null> {

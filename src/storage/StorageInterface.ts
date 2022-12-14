@@ -14,6 +14,12 @@ interface StorageInterface {
     removeAllowedRoleId: (roleId: Snowflake) => Promise<any>
 
     getAllowedRoleIds: () => Promise<Snowflake[]>
+
+    saveRegisteredUserEmailAddress: (userId: Snowflake, emailAddress: string) => Promise<any>
+
+    getRegisteredUserEmailAddress: (userId: Snowflake) => Promise<string | null>
+
+    deleteRegisteredUserEmailAddress: (userId: Snowflake) => Promise<any>
 }
 
 export default StorageInterface;

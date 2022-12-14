@@ -1,4 +1,6 @@
 import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
+import {onButtonClick} from "../components/ButtonClickHandler";
+import {onModalSubmit} from "../components/ModalSubmitHandler";
 import Ping from "./commands/Ping";
 import {CommandInterface} from "../types/Commands";
 import SetChannel from "./commands/SetChannel";
@@ -78,13 +80,15 @@ class Bot {
         });
 
         this.registerChatCommandHandler();
+        this.registerBotButtonHandler();
+        this.registerBotModalHandler();
 
         console.log("Starting bot...");
 
         await this.client.login(this.token);
     }
 
-    private async registerChatCommandHandler() {
+    private registerChatCommandHandler() {
         console.log("Registering slash command event handler");
 
         this.client.on(Events.InteractionCreate, async (interaction) => {
@@ -110,6 +114,30 @@ class Bot {
                     console.error("Could not reply to interaction after catching error in slash command event handler", error);
                 }
             }
+        });
+    }
+
+    private registerBotButtonHandler() {
+        console.log("Registering button event handler");
+
+        this.client.on(Events.InteractionCreate, async (interaction) => {
+            if (!interaction.isButton()) {
+                return;
+            }
+
+            await onButtonClick(interaction);
+        });
+    }
+
+    private registerBotModalHandler() {
+        console.log("Registering modal event handler");
+
+        this.client.on(Events.InteractionCreate, async (interaction) => {
+            if (!interaction.isModalSubmit()) {
+                return;
+            }
+
+            await onModalSubmit(interaction);
         });
     }
 }
