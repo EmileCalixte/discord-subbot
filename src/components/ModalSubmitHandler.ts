@@ -23,9 +23,9 @@ async function handleRegisterEmailAddress(interaction: ModalSubmitInteraction) {
         return;
     }
 
-    const emailAddress = interaction.fields.getTextInputValue(InputId.EmailAddress);
+    const emailAddress = String(interaction.fields.getTextInputValue(InputId.EmailAddress)).trim();
 
-    if (!isEmailValid(String(emailAddress))) {
+    if (!isEmailValid(emailAddress)) {
         interaction.editReply(getLocaleString(interaction.locale, {
             "en-US": "Invalid email address.",
             fr: "Adresse e-mail invalide.",
