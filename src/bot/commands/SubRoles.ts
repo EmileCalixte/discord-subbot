@@ -159,6 +159,7 @@ const SubRoles: CommandInterface = {
                 break;
             case SubCommand.View:
                 executeView(interaction);
+                break;
         }
     }
 }

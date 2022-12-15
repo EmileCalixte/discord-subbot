@@ -46,5 +46,6 @@ export async function onModalSubmit(interaction: ModalSubmitInteraction) {
     switch (interaction.customId) {
         case ModalId.RegisterEmailAddress:
             await handleRegisterEmailAddress(interaction);
+            break;
     }
 }

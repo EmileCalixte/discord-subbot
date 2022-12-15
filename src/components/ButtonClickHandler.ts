@@ -107,5 +107,6 @@ export async function onButtonClick(interaction: ButtonInteraction) {
             break;
         case ButtonId.DeleteRegistration:
             await handleDeleteRegistrationButtonClick(interaction);
+            break;
     }
 }
