@@ -1,6 +1,7 @@
 import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
 import {onButtonClick} from "../components/ButtonClickHandler";
 import {onModalSubmit} from "../components/ModalSubmitHandler";
+import {getRootDirPath} from "../utils/PathUtil";
 import GetAddresses from "./commands/GetAddresses";
 import Ping from "./commands/Ping";
 import {CommandInterface} from "../types/Commands";
@@ -45,7 +46,7 @@ class Bot {
 
         this.commands = new Collection();
 
-        this.storage = new StorageJSON(path.resolve(__dirname, String(process.env.JSON_STORAGE_PATH)));
+        this.storage = new StorageJSON(path.resolve(getRootDirPath(), String(process.env.JSON_STORAGE_PATH)));
 
         for (const command of commands) {
             this.commands.set(command.commandBuilder.name, command);
