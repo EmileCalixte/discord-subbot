@@ -5,8 +5,8 @@ import {REST, Routes} from "discord.js";
 dotenv.config();
 
 async function main() {
-    const token = process.env.BOT_TOKEN;
-    const clientId = process.env.CLIENT_ID;
+    const token = String(process.env.BOT_TOKEN);
+    const clientId = String(process.env.CLIENT_ID);
 
     const bot = new Bot(token);
 

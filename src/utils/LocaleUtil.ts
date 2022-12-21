@@ -14,9 +14,9 @@ export function getLocaleString(locale: LocaleString, localizationMap: Localizat
         return localizationMap["en-US"];
     }
 
-    if (localizationMap[locale] === null) {
+    if (!localizationMap[locale]) {
         return localizationMap["en-US"];
     }
 
-    return localizationMap[locale];
+    return localizationMap[locale] as string;
 }

@@ -45,7 +45,7 @@ class Bot {
 
         this.commands = new Collection();
 
-        this.storage = new StorageJSON(path.resolve(__dirname, process.env.JSON_STORAGE_PATH));
+        this.storage = new StorageJSON(path.resolve(__dirname, String(process.env.JSON_STORAGE_PATH)));
 
         for (const command of commands) {
             this.commands.set(command.commandBuilder.name, command);
@@ -101,6 +101,10 @@ class Bot {
             console.log(`<@${interaction.user.id}> @${interaction.user.username}#${interaction.user.discriminator} issued command ${interaction.commandName}`);
 
             const command = this.commands.get(interaction.commandName);
+
+            if (!command) {
+                return;
+            }
 
             try {
                 await command.execute(interaction);

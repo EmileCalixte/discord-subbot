@@ -10,7 +10,7 @@ async function handleRegisterEmailAddress(interaction: ModalSubmitInteraction) {
 
     const allowedRoleIds = await Bot.getInstance().getStorage().getAllowedRoleIds();
 
-    const memberRoleIds = Array.from((interaction.member.roles as GuildMemberRoleManager).cache.keys());
+    const memberRoleIds = Array.from((interaction.member!.roles as GuildMemberRoleManager).cache.keys());
 
     const isMemberAllowedToRegister = allowedRoleIds.some(allowedRoleId => memberRoleIds.includes(allowedRoleId));
 

@@ -50,7 +50,7 @@ export async function getMessage(guildId: Snowflake, channelId: Snowflake, messa
     }
 }
 
-export async function getChannel(guildId: Snowflake, channelId: Snowflake): Promise<GuildBasedChannel> {
+export async function getChannel(guildId: Snowflake, channelId: Snowflake): Promise<GuildBasedChannel | null> {
     const guild = await getGuild(guildId);
 
     if (!guild) {
