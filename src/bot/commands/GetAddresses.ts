@@ -20,7 +20,7 @@ const GetAddresses: CommandInterface = {
         const allowedRoleIds = await Bot.getInstance().getStorage().getAllowedRoleIds();
 
         for (const memberId in registeredSubscribers) {
-            const member = await getGuildMember(interaction.guildId, memberId);
+            const member = await getGuildMember(interaction.guildId!, memberId);
 
             if (!member) {
                 delete registeredSubscribers[memberId];

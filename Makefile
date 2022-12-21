@@ -1,14 +1,10 @@
-.PHONY: init build run regcmds
-
-init:
-	docker compose run --rm node npm install --verbose --save-dev \
-    webpack webpack-cli typescript ts-loader ts-node nodemon-webpack-plugin
-
-build:
-	docker compose exec node npm run build
+.PHONY: run build regcmds
 
 run:
-	docker compose exec node node ./dist/main.cjs
+	docker compose run node npm run start
+
+build:
+	docker compose run node npm run build
 
 regcmds:
-	docker compose exec node node dist/register-commands.cjs
+	docker compose run node npm run register-commands

@@ -3,7 +3,7 @@ import Bot from "./bot/Bot";
 
 dotenv.config();
 
-const bot = new Bot(process.env.BOT_TOKEN);
+const bot = new Bot(String(process.env.BOT_TOKEN));
 
 bot.run()
     .catch(e => {

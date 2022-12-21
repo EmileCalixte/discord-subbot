@@ -100,6 +100,10 @@ class StorageJSON implements StorageInterface {
             return {};
         }
 
+        if (typeof value !== "object") {
+            throw new Error(`Expected Storage Object ${Key.RegisteredUsers} to be an object, got ${typeof value}`);
+        }
+
         for (const [userId, email] of Object.entries(value)) {
             if (typeof email !== "string") {
                 throw new Error(`Expected Storage Object ${Key.RegisteredUsers}.${userId} to be a string, got ${typeof email}`);
@@ -256,6 +260,8 @@ class StorageJSON implements StorageInterface {
             if (error instanceof SyntaxError) {
                 throw new Error(`Invalid or corrupted storage file: ${error.message}`);
             }
+
+            throw error;
         }
     }
 
