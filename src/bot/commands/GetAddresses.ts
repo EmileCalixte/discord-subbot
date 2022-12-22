@@ -36,7 +36,7 @@ const GetAddresses: CommandInterface = {
             }
         }
 
-        const addressesExportString = Object.values(registeredSubscribers).join(';');
+        const addressesExportString = Object.values(registeredSubscribers).join(',');
 
         const attachment = new AttachmentBuilder(Buffer.from(addressesExportString, "utf-8"), {name: "subscribers.txt"});
 
