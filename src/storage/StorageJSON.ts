@@ -96,7 +96,7 @@ class StorageJSON implements StorageInterface {
     public async getAllRegisteredUserEmailAddresses(): Promise<{[key: Snowflake]: string}> {
         const value = await this.getKeyValue(Key.RegisteredUsers);
 
-        if (value === null) {
+        if (value === undefined) {
             return {};
         }
 
