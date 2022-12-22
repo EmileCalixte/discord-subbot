@@ -58,6 +58,8 @@ https://discord.com/api/oauth2/authorize?client_id=<APPLICATION_ID>&permissions=
 
 Replace `<APPLICATION_ID>` with your **Application ID**, go to the URL and follow the instructions.
 
+> Note : This bot is (currently) NOT designed to work simultaneously on multiple Discord servers. Even though you won't necessarily encounter errors if you try to use the same instance of the bot on several servers, you should run an instance (and thus create an application on the Discord Developer Portal) for each server on which you want to use the bot.
+
 ## Run
 
 To run the bot, simply run:
