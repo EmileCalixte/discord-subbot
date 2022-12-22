@@ -85,7 +85,10 @@ async function executeView(interaction: ChatInputCommandInteraction<CacheType>) 
 
     const embed = new EmbedBuilder()
         .addFields({
-            name: `Il y a actuellement ${allowedRoleIds.length} rôles autorisés à s'enregistrer`,
+            name: getLocaleString(interaction.locale, {
+                "en-US": `There is currently ${allowedRoleIds.length} roles allowed to register`,
+                fr: `Il y a actuellement ${allowedRoleIds.length} rôles autorisés à s'enregistrer`,
+            }),
             value: allowedRoleIds.map(roleId => `<@&${roleId}> (${roleId})`).join("\n"),
         });
 
