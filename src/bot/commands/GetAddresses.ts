@@ -1,6 +1,7 @@
 import {AttachmentBuilder, GuildMemberRoleManager, SlashCommandBuilder} from "discord.js";
 import {CommandInterface} from "../../types/Commands";
 import {getGuildMember} from "../../utils/DiscordJsManagerUtil";
+import {getLocaleString} from "../../utils/LocaleUtil";
 import Bot from "../Bot";
 
 const GetAddresses: CommandInterface = {
@@ -16,6 +17,14 @@ const GetAddresses: CommandInterface = {
         await interaction.deferReply({ephemeral: true});
 
         const registeredSubscribers = await Bot.getInstance().getStorage().getAllRegisteredUserEmailAddresses();
+
+        if (Object.entries(registeredSubscribers).length === 0) {
+            interaction.editReply(getLocaleString(interaction.locale, {
+                "en-US": "There is no registered email addresses.",
+                fr: "Il n'y a aucune adresse e-mail enregistrée.",
+            }));
+            return;
+        }
 
         const allowedRoleIds = await Bot.getInstance().getStorage().getAllowedRoleIds();
 
