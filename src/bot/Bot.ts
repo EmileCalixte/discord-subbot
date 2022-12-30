@@ -132,6 +132,8 @@ class Bot {
                 return;
             }
 
+            console.log(`<@${interaction.user.id}> @${interaction.user.username}#${interaction.user.discriminator} interacted with button ${interaction.customId}`);
+
             await onButtonClick(interaction);
         });
     }
@@ -143,6 +145,8 @@ class Bot {
             if (!interaction.isModalSubmit()) {
                 return;
             }
+
+            console.log(`<@${interaction.user.id}> @${interaction.user.username}#${interaction.user.discriminator} submitted modal ${interaction.customId}`);
 
             await onModalSubmit(interaction);
         });
