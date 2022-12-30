@@ -91,6 +91,8 @@ async function handleDeleteRegistrationButtonClick(interaction: ButtonInteractio
 
     await Bot.getInstance().getStorage().deleteRegisteredUserEmailAddress(interaction.user.id);
 
+    console.log(`Deleted email address for <@${interaction.user.id}> @${interaction.user.username}#${interaction.user.discriminator}`);
+
     await interaction.editReply(getLocaleString(interaction.locale, {
         "en-US": "Your registration has successfully been deleted, your email address is no longer registered.",
         fr: "Votre enregistrement a bien été supprimé, votre adresse e-mail n'est plus enregistrée.",

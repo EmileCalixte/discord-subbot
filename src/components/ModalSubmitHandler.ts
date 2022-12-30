@@ -36,6 +36,8 @@ async function handleRegisterEmailAddress(interaction: ModalSubmitInteraction) {
 
     await Bot.getInstance().getStorage().saveRegisteredUserEmailAddress(interaction.user.id, emailAddress);
 
+    console.log(`Saved email address for <@${interaction.user.id}> @${interaction.user.username}#${interaction.user.discriminator}`);
+
     await interaction.editReply(getLocaleString(interaction.locale, {
         "en-US": "Your email address has been successfully saved.",
         fr: "Votre adresse e-mail a bien été enregistrée."
