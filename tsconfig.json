@@ -3,11 +3,10 @@
     "target": "ESNext",
     "module": "nodenext",
     "lib": ["ESNext"],
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "rootDir": "./src/",
     "outDir": "./dist/",
     "strict": true,
-    "importHelpers": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -15,24 +14,14 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "declaration": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
     "allowJs": true,
     "sourceMap": true
   },
-  "files": [
-    "src/index.ts",
-    "src/register-commands.ts"
-  ],
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "files": ["src/index.ts", "src/register-commands.ts"],
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

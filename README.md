@@ -8,7 +8,7 @@ When retrieving email addresses, the bot checks that each user still has a role 
 
 ## Requirements
 
-- [Node.JS](https://nodejs.org/) >= 18.x
+- [Node.JS](https://nodejs.org/) >= 22.x
 
 ## Setup
 
@@ -18,10 +18,10 @@ After cloning the repository, run the following commands:
 
 ```sh
 # Install dependencies
-npm install
+pnpm install
 
 # Create Javascript production builds from Typescript source code
-npm run build
+pnpm run build
 ```
 
 ### Create a Discord Application
@@ -73,7 +73,7 @@ node dist/index.js
 > ```sh
 > # Install PM2
 > npm install --global pm2
-> 
+>
 > # Run bot with PM2
 > pm2 start dist/index.js --name subbot
 > ```
@@ -106,27 +106,22 @@ Use the `/getaddresses` command to get a text file containing all email addresse
 
 ![image](https://user-images.githubusercontent.com/26703184/209161697-d0f26f06-c23f-41d6-80ea-7969f48b514f.png)
 
-## Prerequisites for development
-
-- Docker Compose
-- Make
-
 ## Development Commands
 
 ### Start development environment
 
 ```sh
-docker compose up
+pnpm dev
 ```
 
 ### Create production builds
 
 ```sh
-make build
+pnpm build
 ```
 
 ### Register bot commands
 
 ```sh
-make regcmds
+pnpm register-commands
 ```

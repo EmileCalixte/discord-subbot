@@ -1,17 +1,17 @@
 {
   "scripts": {
-    "watch": "nodemon ./src/index.ts",
+    "dev": "nodemon ./src/index.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "register-commands": "ts-node src/register-commands.ts"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "nodemon": "^3.1.10",
+    "ts-node": "10.9.2",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "discord.js": "^14.9.0",
-    "dotenv": "^16.0.3"
+    "discord.js": "14.23.2",
+    "dotenv": "^17.2.3"
   }
 }
