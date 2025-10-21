@@ -1,5 +1,5 @@
 enum InputId {
-    EmailAddress = "email-address",
+  EmailAddress = "email-address",
 }
 
 export default InputId;

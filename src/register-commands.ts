@@ -1,46 +1,42 @@
 import * as dotenv from "dotenv";
 import Bot from "./bot/Bot";
-import {REST, Routes} from "discord.js";
+import { REST, Routes } from "discord.js";
 
 dotenv.config();
 
 async function main() {
-    const token = String(process.env.BOT_TOKEN);
-    const clientId = String(process.env.CLIENT_ID);
+  const token = String(process.env.BOT_TOKEN);
+  const clientId = String(process.env.CLIENT_ID);
 
-    const bot = new Bot(token);
+  const bot = new Bot(token);
 
-    const commands = bot.getCommands();
+  const commands = bot.getCommands();
 
-    if (commands.size === 0) {
-        console.log("No command to register, exiting");
-        process.exit(0);
-    }
+  if (commands.size === 0) {
+    console.log("No command to register, exiting");
+    process.exit(0);
+  }
 
-    console.log(`Found ${commands.size} command${commands.size > 1 ? "s" : ""}:`)
+  console.log(`Found ${commands.size} command${commands.size > 1 ? "s" : ""}:`);
 
-    const commandsToRegister = [];
+  const commandsToRegister = [];
 
-    for (const [commandName, command] of commands) {
-        console.log(`- ${commandName}`);
+  for (const [commandName, command] of commands) {
+    console.log(`- ${commandName}`);
 
-        commandsToRegister.push(command.commandBuilder.toJSON());
-    }
+    commandsToRegister.push(command.commandBuilder.toJSON());
+  }
 
-    const rest = new REST({version: "10"}).setToken(token);
+  const rest = new REST({ version: "10" }).setToken(token);
 
-    console.log("Performing API request to register commands...");
+  console.log("Performing API request to register commands...");
 
-    await rest.put(
-        Routes.applicationCommands(clientId),
-        {body: commandsToRegister},
-    );
+  await rest.put(Routes.applicationCommands(clientId), { body: commandsToRegister });
 
-    console.log("Done");
+  console.log("Done");
 }
 
-main()
-    .catch(e => {
-        console.error(e);
-        process.exit(1);
-    });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
