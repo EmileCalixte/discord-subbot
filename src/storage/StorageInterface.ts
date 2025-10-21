@@ -1,27 +1,27 @@
-import {Snowflake} from "discord.js";
+import { Snowflake } from "discord.js";
 
 interface StorageInterface {
-    saveRegisterMessageId: (messageId: Snowflake) => Promise<any>
+  saveRegisterMessageId: (messageId: Snowflake) => Promise<any>;
 
-    saveRegisterMessageChannelId: (channelId: Snowflake) => Promise<any>
+  saveRegisterMessageChannelId: (channelId: Snowflake) => Promise<any>;
 
-    getRegisterMessageId: () => Promise<Snowflake | null>
+  getRegisterMessageId: () => Promise<Snowflake | null>;
 
-    getRegisterMessageChannelId: () => Promise<Snowflake | null>
+  getRegisterMessageChannelId: () => Promise<Snowflake | null>;
 
-    addAllowedRoleId: (roleId: Snowflake) => Promise<any>
+  addAllowedRoleId: (roleId: Snowflake) => Promise<any>;
 
-    removeAllowedRoleId: (roleId: Snowflake) => Promise<any>
+  removeAllowedRoleId: (roleId: Snowflake) => Promise<any>;
 
-    getAllowedRoleIds: () => Promise<Snowflake[]>
+  getAllowedRoleIds: () => Promise<Snowflake[]>;
 
-    saveRegisteredUserEmailAddress: (userId: Snowflake, emailAddress: string) => Promise<any>
+  saveRegisteredUserEmailAddress: (userId: Snowflake, emailAddress: string) => Promise<any>;
 
-    getRegisteredUserEmailAddress: (userId: Snowflake) => Promise<string | null>
+  getRegisteredUserEmailAddress: (userId: Snowflake) => Promise<string | null>;
 
-    deleteRegisteredUserEmailAddress: (userId: Snowflake) => Promise<any>
+  deleteRegisteredUserEmailAddress: (userId: Snowflake) => Promise<any>;
 
-    getAllRegisteredUserEmailAddresses: () => Promise<{[key: Snowflake]: string}>
+  getAllRegisteredUserEmailAddresses: () => Promise<{ [key: Snowflake]: string }>;
 }
 
 export default StorageInterface;

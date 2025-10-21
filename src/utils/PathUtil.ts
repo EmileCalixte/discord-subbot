@@ -1,5 +1,5 @@
 import path from "path";
 
 export function getRootDirPath(): string {
-    return path.resolve(__dirname, "../..");
+  return path.resolve(__dirname, "../..");
 }

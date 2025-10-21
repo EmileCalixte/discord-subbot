@@ -5,8 +5,7 @@ dotenv.config();
 
 const bot = new Bot(String(process.env.BOT_TOKEN));
 
-bot.run()
-    .catch(e => {
-        console.error(e);
-        process.exit(1);
-    });
+bot.run().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
