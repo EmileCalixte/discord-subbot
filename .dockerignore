@@ -1,0 +1,12 @@
+.git
+.github
+.husky
+.idea
+node_modules
+dist
+data
+.env
+storage.json
+Dockerfile
+docker-compose.yml
+*.md

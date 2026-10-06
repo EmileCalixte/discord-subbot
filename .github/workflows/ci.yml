@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review # When a PR changes from draft to ready for review
+      - synchronize # When new commits are added to the PR
+  push:
+    branches: [master]
+
+jobs:
+  check:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable corepack to use pnpm
+        run: corepack enable
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format-check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+  docker:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+
+      - name: Build Docker image
+        run: docker build .

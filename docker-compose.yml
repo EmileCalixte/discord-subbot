@@ -1,0 +1,12 @@
+services:
+  subbot:
+    build: .
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      CLIENT_ID: ${CLIENT_ID}
+    volumes:
+      - subbot-data:/app/data
+
+volumes:
+  subbot-data:

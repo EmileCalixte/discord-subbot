@@ -5,6 +5,8 @@
     "build": "tsc",
     "register-commands": "ts-node src/register-commands.ts",
     "format": "prettier \"**/*.{js,ts,json}\" --write",
+    "format-check": "prettier \"**/*.{js,ts,json}\" --check",
+    "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -23,5 +25,6 @@
   "dependencies": {
     "discord.js": "14.23.2",
     "dotenv": "^17.2.3"
-  }
+  },
+  "packageManager": "pnpm@10.19.0"
 }

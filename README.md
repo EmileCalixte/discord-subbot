@@ -78,6 +78,18 @@ node dist/index.js
 > pm2 start dist/index.js --name subbot
 > ```
 
+## Run with Docker
+
+A `Dockerfile` and a `docker-compose.yml` are provided. The bot data is stored in the `/app/data` volume.
+
+```sh
+# BOT_TOKEN and CLIENT_ID are read from the environment
+docker compose up -d --build
+
+# Register commands
+docker compose exec subbot node dist/register-commands.js
+```
+
 ## Usage
 
 ### Set register channel
